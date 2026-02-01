@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Roman Samoilov"]
   spec.email = ["developers@rage-rb.dev"]
 
-  spec.summary = "Rage instrumentation for the OpenTelemetry framework"
-  spec.description = "Rage instrumentation for the OpenTelemetry framework"
+  spec.summary = "OpenTelemetry instrumentation for the Rage framework"
   spec.homepage = "https://rage-rb.dev"
   spec.license = "Apache-2.0"
   spec.required_ruby_version = ">= 3.2.0"

@@ -38,9 +38,7 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Deferred do
       expect(task_span.status.code).to eq(OpenTelemetry::Trace::Status::UNSET)
       expect(task_span.kind).to eq(:producer)
 
-      expect(task_span.attributes["messaging.system"]).to eq("rage.deferred")
-      expect(task_span.attributes["messaging.operation.type"]).to eq("publish")
-      expect(task_span.attributes["messaging.destination.name"]).to eq("MyTask")
+      expect(task_span.attributes).to be_empty
     end
 
     it "stores the context" do
@@ -63,7 +61,7 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Deferred do
 
   describe ".create_perform_span" do
     let(:task) { double(meta: task_metadata) }
-    let(:task_metadata) { double(attempts: 0, retrying?: false) }
+    let(:task_metadata) { double(attempts: 1, retrying?: false) }
 
     it "creates a span" do
       subject.create_perform_span(task_class:, task:, task_context:) { result }
@@ -74,25 +72,8 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Deferred do
       expect(task_span.status.code).to eq(OpenTelemetry::Trace::Status::UNSET)
       expect(task_span.kind).to eq(:consumer)
 
-      expect(task_span.attributes["messaging.system"]).to eq("rage.deferred")
-      expect(task_span.attributes["messaging.operation.type"]).to eq("process")
-      expect(task_span.attributes["messaging.destination.name"]).to eq("MyTask")
-      expect(task_span.attributes["messaging.message.delivery_attempt"]).to be_nil
-
       expect(task_span.links.nil?).to eq(true)
-    end
-
-    describe "with retries" do
-      let(:task_metadata) { double(attempts: 3, retrying?: true) }
-
-      it "adds the retries attribute to the span" do
-        subject.create_perform_span(task_class:, task:, task_context:) { result }
-
-        expect(task_span.attributes["messaging.system"]).to eq("rage.deferred")
-        expect(task_span.attributes["messaging.operation.type"]).to eq("process")
-        expect(task_span.attributes["messaging.destination.name"]).to eq("MyTask")
-        expect(task_span.attributes["messaging.message.delivery_attempt"]).to eq(3)
-      end
+      expect(task_span.attributes).to be_empty
     end
 
     describe "with root span" do

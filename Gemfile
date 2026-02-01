@@ -14,7 +14,7 @@ gem "rspec", "~> 3.0"
 gem "standard", "~> 1.3"
 
 group :test do
-  gem "rage-rb", github: "rage-rb/rage", branch: "main"
+  gem "rage-rb"
   gem "opentelemetry-sdk", "~> 1.0"
   gem "opentelemetry-test-helpers", "~> 0.3"
   gem "yard", "~> 0.9"

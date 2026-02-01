@@ -105,8 +105,8 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Cable do
       expect(connection_span.name).to eq("MyConnection my_action")
       expect(connection_span.status.code).to eq(OpenTelemetry::Trace::Status::UNSET)
 
-      expect(connection_span.attributes["messaging.system"]).to eq("rage.cable")
-      expect(connection_span.attributes["messaging.destination.name"]).to eq("MyConnection")
+      expect(connection_span.attributes["rage.cable.connection.class"]).to eq("MyConnection")
+      expect(connection_span.attributes["rage.cable.connection.action"]).to eq("my_action")
 
       expect(connection_span.links.first).to eq(link)
     end
@@ -179,13 +179,13 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Cable do
 
       expect(finished_spans.size).to eq(1)
 
-      expect(channel_span.name).to eq("MyChannel receive")
+      expect(channel_span.name).to eq("MyChannel my_action")
       expect(channel_span.status.code).to eq(OpenTelemetry::Trace::Status::UNSET)
       expect(channel_span.kind).to eq(:server)
 
-      expect(channel_span.attributes["messaging.system"]).to eq("rage.cable")
-      expect(channel_span.attributes["messaging.destination.name"]).to eq("MyChannel")
-      expect(channel_span.attributes["messaging.operation.type"]).to eq("receive")
+      expect(channel_span.attributes["rpc.system"]).to eq("rage.cable")
+      expect(channel_span.attributes["rpc.service"]).to eq("MyChannel")
+      expect(channel_span.attributes["rpc.method"]).to eq("my_action")
 
       expect(channel_span.links.first).to eq(link)
     end
@@ -220,9 +220,11 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Cable do
       it "sets span kind to server" do
         subject.create_channel_span(env:, action:, channel:) { result }
 
-        expect(channel_span.attributes["messaging.operation.type"]).to eq("receive")
         expect(channel_span.name).to eq("MyChannel subscribe")
         expect(channel_span.kind).to eq(:server)
+
+        expect(channel_span.attributes["rpc.service"]).to eq("MyChannel")
+        expect(channel_span.attributes["rpc.method"]).to eq("subscribed")
       end
     end
 
@@ -232,9 +234,11 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Cable do
       it "sets span kind to server" do
         subject.create_channel_span(env:, action:, channel:) { result }
 
-        expect(channel_span.attributes["messaging.operation.type"]).to be_nil
         expect(channel_span.name).to eq("MyChannel unsubscribe")
         expect(channel_span.kind).to eq(:internal)
+
+        expect(channel_span.attributes["rpc.service"]).to eq("MyChannel")
+        expect(channel_span.attributes["rpc.method"]).to eq("unsubscribed")
       end
     end
   end
@@ -261,9 +265,7 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Cable do
       expect(broadcast_span.status.code).to eq(OpenTelemetry::Trace::Status::UNSET)
       expect(broadcast_span.kind).to eq(:producer)
 
-      expect(broadcast_span.attributes["messaging.system"]).to eq("rage.cable")
-      expect(broadcast_span.attributes["messaging.operation.type"]).to eq("publish")
-      expect(broadcast_span.attributes["messaging.destination.name"]).to eq("test-stream")
+      expect(broadcast_span.attributes["rage.cable.broadcast.stream"]).to eq("test-stream")
     end
 
     describe "with error" do

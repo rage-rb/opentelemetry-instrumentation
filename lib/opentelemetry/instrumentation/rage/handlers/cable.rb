@@ -49,8 +49,8 @@ module OpenTelemetry
 
             OpenTelemetry::Context.with_current(handshake_context) do
               attributes = {
-                SemConv::Incubating::MESSAGING::MESSAGING_SYSTEM => "rage.cable",
-                SemConv::Incubating::MESSAGING::MESSAGING_DESTINATION_NAME => connection.class.name
+                "rage.cable.connection.class" => connection.class.name,
+                "rage.cable.connection.action" => action.to_s
               }
 
               kind = (action == :connect) ? :server : :internal
@@ -84,18 +84,17 @@ module OpenTelemetry
 
             OpenTelemetry::Context.with_current(handshake_context) do
               attributes = {
-                SemConv::Incubating::MESSAGING::MESSAGING_SYSTEM => "rage.cable",
-                SemConv::Incubating::MESSAGING::MESSAGING_DESTINATION_NAME => channel.class.name
+                "rpc.system" => "rage.cable",
+                "rpc.service" => channel.class.name,
+                "rpc.method" => action.to_s
               }
-
-              attributes[SemConv::Incubating::MESSAGING::MESSAGING_OPERATION_TYPE] = "receive" unless action == :unsubscribed
 
               span_name = if action == :subscribed
                 "#{channel.class} subscribe"
               elsif action == :unsubscribed
                 "#{channel.class} unsubscribe"
               else
-                "#{channel.class} receive"
+                "#{channel.class} #{action}"
               end
 
               kind = (action == :unsubscribed) ? :internal : :server
@@ -123,9 +122,7 @@ module OpenTelemetry
           # @param stream [String] the name of the stream
           def self.create_broadcast_span(stream:)
             attributes = {
-              SemConv::Incubating::MESSAGING::MESSAGING_SYSTEM => "rage.cable",
-              SemConv::Incubating::MESSAGING::MESSAGING_OPERATION_TYPE => "publish",
-              SemConv::Incubating::MESSAGING::MESSAGING_DESTINATION_NAME => stream
+              "rage.cable.broadcast.stream" => stream
             }
 
             Rage::Instrumentation.instance.tracer.in_span("Rage::Cable broadcast", kind: :producer, attributes:) do |span|

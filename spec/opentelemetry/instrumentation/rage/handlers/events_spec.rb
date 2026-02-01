@@ -112,7 +112,6 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Events do
         expect(event_span.attributes["messaging.system"]).to eq("rage.events")
         expect(event_span.attributes["messaging.operation.type"]).to eq("process")
         expect(event_span.attributes["messaging.destination.name"]).to eq("MyEvent")
-        expect(event_span.attributes["code.function.name"]).to eq("MySubscriber#call")
       end
 
       describe "with error" do

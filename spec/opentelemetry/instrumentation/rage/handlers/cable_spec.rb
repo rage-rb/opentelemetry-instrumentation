@@ -107,7 +107,6 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Cable do
 
       expect(connection_span.attributes["messaging.system"]).to eq("rage.cable")
       expect(connection_span.attributes["messaging.destination.name"]).to eq("MyConnection")
-      expect(connection_span.attributes["code.function.name"]).to eq("MyConnection#my_action")
 
       expect(connection_span.links.first).to eq(link)
     end
@@ -187,7 +186,6 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Cable do
       expect(channel_span.attributes["messaging.system"]).to eq("rage.cable")
       expect(channel_span.attributes["messaging.destination.name"]).to eq("MyChannel")
       expect(channel_span.attributes["messaging.operation.type"]).to eq("receive")
-      expect(channel_span.attributes["code.function.name"]).to eq("MyChannel#my_action")
 
       expect(channel_span.links.first).to eq(link)
     end

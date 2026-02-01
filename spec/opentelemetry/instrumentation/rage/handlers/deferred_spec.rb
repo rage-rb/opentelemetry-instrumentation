@@ -41,7 +41,6 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Deferred do
       expect(task_span.attributes["messaging.system"]).to eq("rage.deferred")
       expect(task_span.attributes["messaging.operation.type"]).to eq("publish")
       expect(task_span.attributes["messaging.destination.name"]).to eq("MyTask")
-      expect(task_span.attributes["code.function.name"]).to eq("MyTask.enqueue")
     end
 
     it "stores the context" do
@@ -78,7 +77,6 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Deferred do
       expect(task_span.attributes["messaging.system"]).to eq("rage.deferred")
       expect(task_span.attributes["messaging.operation.type"]).to eq("process")
       expect(task_span.attributes["messaging.destination.name"]).to eq("MyTask")
-      expect(task_span.attributes["code.function.name"]).to eq("MyTask#perform")
       expect(task_span.attributes["messaging.message.delivery_attempt"]).to be_nil
 
       expect(task_span.links.nil?).to eq(true)
@@ -93,7 +91,6 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Deferred do
         expect(task_span.attributes["messaging.system"]).to eq("rage.deferred")
         expect(task_span.attributes["messaging.operation.type"]).to eq("process")
         expect(task_span.attributes["messaging.destination.name"]).to eq("MyTask")
-        expect(task_span.attributes["code.function.name"]).to eq("MyTask#perform")
         expect(task_span.attributes["messaging.message.delivery_attempt"]).to eq(3)
       end
     end

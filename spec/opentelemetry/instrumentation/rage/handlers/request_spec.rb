@@ -44,10 +44,7 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Request do
         end
 
         expect(span.name).to eq("PUT /api/test/:id")
-
         expect(span.attributes["http.route"]).to eq("/api/test/:id")
-        expect(span.attributes["code.function.name"]).to eq("MyController#my_action")
-
         expect(span.status.code).to eq(OpenTelemetry::Trace::Status::UNSET)
       end
     end

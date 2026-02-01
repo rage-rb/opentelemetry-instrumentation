@@ -27,5 +27,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "opentelemetry-instrumentation-rack", "~> 0.29"
-  spec.add_dependency "opentelemetry-semantic_conventions", ">= 1.36.0"
+  spec.add_dependency "opentelemetry-semantic_conventions", "~> 1.36"
 end

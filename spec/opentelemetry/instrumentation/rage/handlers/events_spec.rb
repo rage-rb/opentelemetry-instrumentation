@@ -43,7 +43,7 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage::Handlers::Events do
         expect(event_span.kind).to eq(:producer)
 
         expect(event_span.attributes["messaging.system"]).to eq("rage.events")
-        expect(event_span.attributes["messaging.operation.type"]).to eq("publish")
+        expect(event_span.attributes["messaging.operation.type"]).to eq("send")
         expect(event_span.attributes["messaging.destination.name"]).to eq("MyEvent")
       end
 

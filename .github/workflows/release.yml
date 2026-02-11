@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - lib/opentelemetry/instrumentation/rage/version.rb
-  pull_request:
-    paths:
-      - lib/opentelemetry/instrumentation/rage/version.rb
 
 permissions:
   contents: write

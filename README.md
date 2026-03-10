@@ -38,7 +38,7 @@ end
 
 ## Examples
 
-Example usage can be seen in the [`./example/trace_demonstration.ru` file](https://github.com/open-telemetry/opentelemetry-ruby-contrib/blob/main/instrumentation/rage/example/trace_demonstration.ru)
+Example usage can be seen in the [`./example/trace_demonstration.ru` file](https://github.com/rage-rb/opentelemetry-instrumentation/blob/main/example/trace_demonstration.ru)
 
 ## License
 

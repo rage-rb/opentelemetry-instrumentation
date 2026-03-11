@@ -26,7 +26,10 @@ module OpenTelemetry
           end
 
           # @param env [Hash] the Rack env
-          def self.create_stream_span(env:)
+          # @param type [Symbol] the type of the SSE response
+          def self.create_stream_span(env:, type:)
+            return yield if type == :single
+
             request_context = env[REQUEST_CONTEXT]
 
             OpenTelemetry::Context.with_current(request_context) do

@@ -79,6 +79,7 @@ RSpec.describe "OpenTelemetry::Instrumentation::Rage::Handlers::SSE" do
     let(:span) { instrumentation.tracer.start_span("GET /stream") }
     let(:context) { OpenTelemetry::Trace.context_with_span(span) }
     let(:env) { {"otel.rage.request_context" => context} }
+    let(:type) { :stream }
 
     let(:finished_spans) { EXPORTER.finished_spans }
     let(:stream_span) { finished_spans.last }
@@ -92,7 +93,7 @@ RSpec.describe "OpenTelemetry::Instrumentation::Rage::Handlers::SSE" do
     after { instrumentation.instance_variable_set(:@installed, false) }
 
     it "creates a span" do
-      subject.create_stream_span(env:) { result }
+      subject.create_stream_span(env:, type:) { result }
 
       expect(finished_spans.size).to eq(2)
 
@@ -107,7 +108,7 @@ RSpec.describe "OpenTelemetry::Instrumentation::Rage::Handlers::SSE" do
       let(:context) { OpenTelemetry::Baggage.set_value("testing_baggage", "it_worked") }
 
       it "propagates baggage" do
-        subject.create_stream_span(env:) do
+        subject.create_stream_span(env:, type:) do
           expect(OpenTelemetry::Baggage.value("testing_baggage")).to eq("it_worked")
           result
         end
@@ -118,11 +119,22 @@ RSpec.describe "OpenTelemetry::Instrumentation::Rage::Handlers::SSE" do
       let(:result) { double(error?: true, exception: RuntimeError.new) }
 
       it "handles returned exceptions" do
-        subject.create_stream_span(env:) { result }
+        subject.create_stream_span(env:, type:) { result }
 
         expect(stream_span.status.code).to eq(OpenTelemetry::Trace::Status::ERROR)
         expect(stream_span.events.first.name).to eq "exception"
         expect(stream_span.events.first.attributes["exception.type"]).to eq "RuntimeError"
+      end
+    end
+
+    describe "with one-off update" do
+      let(:type) { :single }
+
+      it "doesn't create a span" do
+        subject.create_stream_span(env:, type:) { result }
+
+        expect(finished_spans.size).to eq(1)
+        expect(finished_spans.last.name).not_to eq("SSE stream")
       end
     end
   end

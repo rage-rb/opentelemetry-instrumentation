@@ -64,6 +64,12 @@ module OpenTelemetry
 
             # install log context to add tracing info to logs
             config.log_context << LogContext
+
+            # install telemetry handler to monitor SSE streams
+            if ::Rage::Telemetry.available_spans.any? { |span_name| span_name.start_with?("sse.") }
+              require_relative "handlers/sse"
+              config.telemetry.use Handlers::SSE
+            end
           end
         end
       end

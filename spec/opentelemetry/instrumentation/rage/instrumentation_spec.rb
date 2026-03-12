@@ -45,6 +45,10 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage do
 
       expect(Rage.config.log_context).to receive(:<<).with(OpenTelemetry::Instrumentation::Rage::LogContext)
 
+      if defined?(OpenTelemetry::Instrumentation::Rage::Handlers::SSE)
+        expect(Rage.config.telemetry).to receive(:use).with(OpenTelemetry::Instrumentation::Rage::Handlers::SSE)
+      end
+
       instrumentation.install({})
     end
   end

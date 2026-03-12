@@ -4,7 +4,7 @@ The OpenTelemetry Rage instrumentation provides automatic observability for [Rag
 
 This instrumentation enables comprehensive tracing and logging for Rage applications:
 
-* Creates spans for HTTP requests, WebSocket messages, event subscribers, and deferred tasks
+* Creates spans for HTTP requests, WebSocket messages, SSE streams, event subscribers, and deferred tasks
 * Propagates OpenTelemetry context across fibers created via `Fiber.schedule` and deferred tasks
 * Enriches logs with trace and span IDs for correlated observability
 

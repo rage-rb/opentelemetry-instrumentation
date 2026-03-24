@@ -10,13 +10,11 @@ This instrumentation enables comprehensive tracing and logging for Rage applicat
 
 ## How do I get started?
 
-Install the gem using:
+Add the required gems to your Gemfile:
 
 ```console
-gem install opentelemetry-instrumentation-rage
+bundle add opentelemetry-sdk opentelemetry-instrumentation-rage
 ```
-
-Or, if you use [bundler][bundler-home], include `opentelemetry-instrumentation-rage` in your `Gemfile`.
 
 ## Usage
 

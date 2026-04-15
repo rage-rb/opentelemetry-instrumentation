@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.5.0] - 2026-04-15
+
+- Don't create spans for unbounded streams
+
 ## [0.4.0] - 2026-03-11
 
 - Add spans for SSE streams

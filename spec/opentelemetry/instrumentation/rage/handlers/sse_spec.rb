@@ -137,5 +137,16 @@ RSpec.describe "OpenTelemetry::Instrumentation::Rage::Handlers::SSE" do
         expect(finished_spans.last.name).not_to eq("SSE stream")
       end
     end
+
+    describe "with broadcasts" do
+      let(:type) { :broadcast }
+
+      it "doesn't create a span" do
+        subject.create_stream_span(env:, type:) { result }
+
+        expect(finished_spans.size).to eq(1)
+        expect(finished_spans.last.name).not_to eq("SSE stream")
+      end
+    end
   end
 end

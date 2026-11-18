@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+- Add server capacity gauges from `Iodine::Perf` (requires iodine >= 7.0): `iodine.connections.queued` and `ruby.event_loop.utilization`
 ## [0.5.0] - 2026-04-15
 
 - Don't create spans for unbounded streams

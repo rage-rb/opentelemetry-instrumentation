@@ -7,6 +7,7 @@ This instrumentation enables comprehensive tracing and logging for Rage applicat
 * Creates spans for HTTP requests, WebSocket messages, SSE streams, event subscribers, and deferred tasks
 * Propagates OpenTelemetry context across fibers created via `Fiber.schedule` and deferred tasks
 * Enriches logs with trace and span IDs for correlated observability
+* Publishes GC pressure gauges by periodically sampling `GC.stat`
 
 ## How do I get started?
 
@@ -31,6 +32,21 @@ Alternatively, you can also call `use_all` to install all the available instrume
 ```ruby
 OpenTelemetry::SDK.configure do |c|
   c.use_all
+end
+```
+
+## Metrics
+
+The instrumentation publishes GC pressure gauges backed by periodic `GC.stat` sampling: `ruby.gc.major_count`, `ruby.gc.minor_count`, `ruby.gc.time`, `ruby.heap.live_slots`, `ruby.heap.free_slots`, and `ruby.malloc_increase_bytes`.
+
+The gauges are observable — `GC.stat` is sampled each time a meter provider collects metrics, so nothing is recorded unless metrics are configured. To collect them, add `opentelemetry-metrics-sdk` to your Gemfile and register a metric reader:
+
+```ruby
+OpenTelemetry::SDK.configure do |c|
+  c.add_metric_reader OpenTelemetry::SDK::Metrics::Export::PeriodicMetricReader.new(
+    exporter: OpenTelemetry::SDK::Metrics::Export::ConsoleMetricPullExporter.new
+  )
+  c.use "OpenTelemetry::Instrumentation::Rage"
 end
 ```
 

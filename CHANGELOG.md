@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- Add GC pressure gauges via periodic `GC.stat` sampling (`ruby.gc.major_count`, `ruby.gc.minor_count`, `ruby.gc.time`, `ruby.heap.live_slots`, `ruby.heap.free_slots`, `ruby.malloc_increase_bytes`)
+
 ## [0.5.0] - 2026-04-15
 
 - Don't create spans for unbounded streams

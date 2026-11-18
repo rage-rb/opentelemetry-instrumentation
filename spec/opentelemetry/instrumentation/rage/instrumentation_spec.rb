@@ -53,6 +53,12 @@ RSpec.describe OpenTelemetry::Instrumentation::Rage do
     end
   end
 
+  it "skips GC metrics when disabled" do
+    expect(OpenTelemetry::Instrumentation::Rage::GCPressure).not_to receive(:setup)
+
+    instrumentation.install(gc_metrics: false)
+  end
+
   describe "#compatible" do
     describe "with a compatible version" do
       before do

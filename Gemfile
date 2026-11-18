@@ -16,6 +16,7 @@ gem "standard", "~> 1.3"
 group :test do
   gem "rage-rb"
   gem "opentelemetry-sdk", "~> 1.0"
+  gem "opentelemetry-metrics-sdk", "~> 0.2"
   gem "opentelemetry-test-helpers", "~> 0.3"
   gem "yard", "~> 0.9"
 end
